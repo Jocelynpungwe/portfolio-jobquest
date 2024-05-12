@@ -11,6 +11,8 @@ const connectDB = require('./db/connect')
 const fileUpload = require('express-fileupload')
 // routers
 const authRoutes = require('./routes/auth')
+const jobsRoutes = require('./routes/job')
+const authenticationMiddleware = require('./middleware/authentication')
 
 // error handlers
 const notFoundMiddleware = require('./middleware/not-found')
@@ -22,6 +24,7 @@ app.use(fileUpload())
 
 // routes
 app.use('/api/v1/auth', authRoutes)
+app.use('/api/v1/jobs', authenticationMiddleware, jobsRoutes)
 
 app.use(notFoundMiddleware)
 app.use(errorHandlerMiddleware)
