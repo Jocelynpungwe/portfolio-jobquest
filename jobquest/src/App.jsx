@@ -1,3 +1,6 @@
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/ReactToastify.css'
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import {
   ErrorPage,
@@ -35,6 +38,7 @@ function App() {
           <Route path="register" element={<RegistrationPage />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
+        <ToastContainer position="top-center" />
       </BrowserRouter>
     </>
   )
