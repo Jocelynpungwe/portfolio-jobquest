@@ -25,9 +25,18 @@ const initialState = {
 export const getAllJobs = createAsyncThunk(
   'allJob/get',
   async (_, thunkAPI) => {
-    try {
-      const { data } = await customeFetch.get('/jobs/', authHeader(thunkAPI))
+    const { page, search, searchStatus, searchType, sort } =
+      thunkAPI.getState().allJobs
 
+    let url = `/jobs/?status=${searchStatus}&jobType=${searchType}&sort=${sort}&page=${page}`
+    if (search) {
+      url = url + `&search=${search}`
+    }
+
+  
+
+    try {
+      const { data } = await customeFetch.get(url, authHeader(thunkAPI))
       return data
     } catch (error) {
       thunkAPI.rejectWithValue(error.response.data.msg)
@@ -64,6 +73,8 @@ const allJobsSlice = createSlice({
       const { name, value } = payload
       state.page = 1
       state[name] = value
+      console.log(name)
+      console.log(value)
     },
     clearFilter: (state) => {
       return { ...state, ...initialFiltersState }

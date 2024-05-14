@@ -42,34 +42,33 @@ const updateJob = async (req, res) => {
 
 const getAllJobs = async (req, res) => {
   const { search, status, jobType, sort } = req.query
-
   const queryObject = { createdBy: req.user.userId }
 
   if (search) {
     queryObject.position = { $regex: search, $options: 'i' }
   }
 
-  if (status && status !== 'All') {
+  if (status && status !== 'all') {
     queryObject.status = status
   }
 
-  if (jobType && jobType !== 'All') {
+  if (jobType && jobType !== 'all') {
     queryObject.jobType = jobType
   }
 
   let result = Jobs.find(queryObject)
 
   if (sort === 'latest') {
-    result.sort('-createdAt')
+    result = result.sort('-createdAt')
   }
   if (sort === 'oldest') {
-    result.sort('createdAt')
+    result = result.sort('createdAt')
   }
   if (sort === 'a-z') {
-    result.sort('position')
+    result = result.sort('position')
   }
   if (sort === 'z-a') {
-    result.sort('-position')
+    result = result.sort('-position')
   }
 
   const page = Number(req.params.page) || 1
@@ -77,8 +76,6 @@ const getAllJobs = async (req, res) => {
   const skip = (page - 1) * limit
 
   result = result.skip(skip).limit(limit)
-
-  result = result.skip(page).limit(limit)
 
   const jobs = await result
 
