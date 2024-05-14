@@ -1,21 +1,28 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
+import customeFetch from '../../utils/fetchCustome'
 import { toast } from 'react-toastify'
 
+import {
+  addUserToLocalStorage,
+  getUserFromLocalStorage,
+  removeUserFromLocalStorage,
+} from '../../utils/localStorage'
+import { clearValues } from '../job/jobSlice'
+import { clearAllJobsState } from '../allJobs/allJobsSlice'
+import authHeader from '../../utils/authHeader'
 const initialState = {
   isLoading: false,
   isSideBarOpen: false,
-  user: '',
+  user: getUserFromLocalStorage(),
 }
 
 export const registerUser = createAsyncThunk(
   'user/registerUser',
   async (user, thunkAPI) => {
     try {
-      const { data } = await axios.post('/api/v1/auth/register', user)
+      const { data } = await customeFetch.post('/auth/register', user)
       return data
     } catch (error) {
-      console.log(error.response.data.msg)
       return thunkAPI.rejectWithValue(error.response.data.msg)
     }
   }
@@ -25,11 +32,46 @@ export const loginUser = createAsyncThunk(
   'user/login',
   async (user, thunkAPI) => {
     try {
-      console.log(user)
-      const { data } = await axios.post('/api/v1/auth/login', user)
+      const { data } = await customeFetch.post('/auth/login', user)
+
       return data
     } catch (error) {
-      console.log(error.response.data.msg)
+      return thunkAPI.rejectWithValue(error.response.data.msg)
+    }
+  }
+)
+
+export const updateUser = createAsyncThunk(
+  '/user/update',
+  async (user, thunkAPI) => {
+    try {
+      const { data } = await customeFetch.patch(
+        '/auth/updateUser',
+        user,
+        authHeader(thunkAPI)
+      )
+
+      return data
+    } catch (error) {
+      if (error.response.status === 401) {
+        thunkAPI.dispatch(logoutUser())
+
+        return thunkAPI.rejectWithValue('Unauthorized! Logging Out...')
+      }
+      return thunkAPI.rejectWithValue(error.response.data.msg)
+    }
+  }
+)
+
+export const clearStore = createAsyncThunk(
+  'user/clear',
+  async (message, thunkAPI) => {
+    try {
+      thunkAPI.dispatch(logoutUser(message))
+      thunkAPI.dispatch(clearAllJobsState())
+      thunkAPI.dispatch(clearValues())
+      return thunkAPI.fulfillWithValue('Logging Out...')
+    } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg)
     }
   }
@@ -38,7 +80,19 @@ export const loginUser = createAsyncThunk(
 const userSlice = createSlice({
   name: 'User',
   initialState,
-  reducers: {},
+  reducers: {
+    toggleSideBar: (state) => {
+      state.isSideBarOpen = !state.isSideBarOpen
+    },
+    logoutUser: (state, { payload }) => {
+      state.user = null
+      state.isSideBarOpen = false
+      removeUserFromLocalStorage()
+      if (payload) {
+        toast.success(payload)
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state, { payload }) => {
@@ -67,7 +121,25 @@ const userSlice = createSlice({
         state.isLoading = false
         toast.error(payload)
       })
+      .addCase(updateUser.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(updateUser.fulfilled, (state, { payload }) => {
+        const { user } = payload
+        state.isLoading = false
+        state.user = user
+        addUserToLocalStorage(user)
+        toast.success(`User Updated`)
+      })
+      .addCase(updateUser.rejected, (state, { payload }) => {
+        state.isLoading = false
+        toast.error(payload)
+      })
+      .addCase(clearStore.rejected, (state) => {
+        toast.error('There was an error')
+      })
   },
 })
 
+export const { toggleSideBar, logoutUser } = userSlice.actions
 export default userSlice.reducer

@@ -15,6 +15,6 @@ router.post('/login', loginUser)
 
 router.post('/upload', authenticationMiddleware, uploadUserProfile)
 router.post('/password', authenticationMiddleware, changePassword)
-router.post('/updateUser', authenticationMiddleware, updateUser)
+router.patch('/updateUser', authenticationMiddleware, updateUser)
 
 module.exports = router
