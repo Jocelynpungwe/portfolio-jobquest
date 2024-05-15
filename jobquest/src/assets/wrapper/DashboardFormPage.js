@@ -6,9 +6,17 @@ const Wrapper = styled.section`
   background: var(--white);
   padding: 3rem 2rem 4rem;
   box-shadow: var(--shadow-2);
+
   h3 {
     margin-top: 0;
   }
+
+  .dashboard-user-profile {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  }
+
   .form {
     margin: 0;
     border-radius: 0;

@@ -63,6 +63,29 @@ export const updateUser = createAsyncThunk(
   }
 )
 
+export const uploadUserProfile = createAsyncThunk(
+  'user/profile',
+  async (image, thunkAPI) => {
+    try {
+      const { data } = await customeFetch.patch('/auth/upload', image, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
+        },
+      })
+
+      return data
+    } catch (error) {
+      if (error.response.status === 401) {
+        thunkAPI.dispatch(logoutUser())
+
+        return thunkAPI.rejectWithValue('Unauthorized! Logging Out...')
+      }
+      return thunkAPI.rejectWithValue(error.response.data.msg)
+    }
+  }
+)
+
 export const clearStore = createAsyncThunk(
   'user/clear',
   async (message, thunkAPI) => {
@@ -137,6 +160,20 @@ const userSlice = createSlice({
       })
       .addCase(clearStore.rejected, (state) => {
         toast.error('There was an error')
+      })
+      .addCase(uploadUserProfile.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(uploadUserProfile.fulfilled, (state, { payload }) => {
+        const { user } = payload
+        state.isLoading = false
+        state.user = user
+        addUserToLocalStorage(user)
+        toast.success(`Profile Picture Updated`)
+      })
+      .addCase(uploadUserProfile.rejected, (state, { payload }) => {
+        state.isLoading = false
+        toast.error(payload)
       })
   },
 })

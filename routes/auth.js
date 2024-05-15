@@ -13,22 +13,12 @@ router.post('/register', registerUser)
 
 router.post('/login', loginUser)
 
-router.post(
-  '/upload',
-  authenticationMiddleware,
-  testUserMiddleware,
-  uploadUserProfile
-)
-router.post(
-  '/password',
-  authenticationMiddleware,
-  testUserMiddleware,
-  changePassword
-)
+router.patch('/upload', authenticationMiddleware, uploadUserProfile)
+router.post('/password', authenticationMiddleware, changePassword)
 router.patch(
   '/updateUser',
   authenticationMiddleware,
-  testUserMiddleware,
+
   updateUser
 )
 

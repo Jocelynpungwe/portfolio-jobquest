@@ -138,12 +138,16 @@ const uploadUserProfile = async (req, res) => {
         runValidators: true,
       }
     )
+    const token = user.createJWT()
     res.status(StatusCodes.OK).json({
       user: {
         name: user.name,
+        lastName: user.lastName,
         profile: user.image,
+        location: user.location,
+        email: user.email,
+        token,
       },
-      msg: 'Default Profile',
     })
     return
   }
@@ -193,10 +197,16 @@ const uploadUserProfile = async (req, res) => {
     }
   )
 
+  const token = userProfile.createJWT()
+
   res.status(StatusCodes.OK).json({
     user: {
       name: userProfile.name,
+      lastName: userProfile.lastName,
       profile: userProfile.image,
+      location: userProfile.location,
+      email: userProfile.email,
+      token,
     },
   })
 }

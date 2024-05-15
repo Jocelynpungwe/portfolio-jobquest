@@ -35,7 +35,12 @@ const Navbar = () => {
             className="btn"
             onClick={() => setShowLogout((prevData) => !prevData)}
           >
-            <FaUserCircle />
+            {/* <FaUserCircle /> */}
+            <img
+              src={user.profile}
+              alt="user profile"
+              className="profile-picture"
+            />
             {user.name}
             <FaCaretDown />
           </button>

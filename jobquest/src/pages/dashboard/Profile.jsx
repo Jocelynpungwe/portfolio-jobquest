@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FormRow } from '../../components'
 import Wrapper from '../../assets/wrapper/DashboardFormPage'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
-import { updateUser } from '../../features/user/userSlice'
+import { updateUser, uploadUserProfile } from '../../features/user/userSlice'
 
 const Profile = () => {
   const { isLoading, user } = useSelector((store) => store.user)
@@ -37,12 +37,30 @@ const Profile = () => {
     })
   }
 
+  const handleFileChange = (e) => {
+    const imageFile = e.target.files[0]
+    const formData = new FormData()
+    formData.append('image', imageFile)
+    dispatch(uploadUserProfile(formData))
+  }
+
   return (
     <Wrapper>
       <form className="form" onSubmit={handleSubmit}>
         <h3>profile</h3>
-
+        <img
+          src={user.profile}
+          alt="user profile"
+          className="dashboard-user-profile"
+        />
         <div className="form-center">
+          <FormRow
+            type="file"
+            name="profile"
+            accept="image/*"
+            labelText="Profile Picture"
+            handleChange={handleFileChange}
+          />
           <FormRow
             type="text"
             name="name"
