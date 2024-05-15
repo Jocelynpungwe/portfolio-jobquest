@@ -115,6 +115,7 @@ export const {
   showLoading,
   hideLoading,
   handleChange,
+  changePage,
   clearFilter,
   clearAllJobsState,
 } = allJobsSlice.actions

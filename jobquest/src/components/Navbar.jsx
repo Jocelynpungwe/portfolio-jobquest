@@ -4,11 +4,7 @@ import { FaAlignLeft, FaUserCircle, FaCaretDown } from 'react-icons/fa'
 import Logo from './Logo'
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import {
-  toggleSideBar,
-  logoutUser,
-  clearStore,
-} from '../features/user/userSlice'
+import { toggleSideBar, clearStore } from '../features/user/userSlice'
 
 const Navbar = () => {
   const { user } = useSelector((store) => store.user)
@@ -26,7 +22,9 @@ const Navbar = () => {
           <FaAlignLeft />
         </button>
         <div>
-          <Logo />
+          <div className="logo">
+            <Logo />
+          </div>
           <h3 className="logo-text">dashboard</h3>
         </div>
         <div className="btn-container">
@@ -35,7 +33,6 @@ const Navbar = () => {
             className="btn"
             onClick={() => setShowLogout((prevData) => !prevData)}
           >
-            {/* <FaUserCircle /> */}
             <img
               src={user.profile}
               alt="user profile"

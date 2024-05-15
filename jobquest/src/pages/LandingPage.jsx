@@ -17,9 +17,11 @@ const LandingPage = () => {
             job <span>tracking</span> app
           </h1>
           <p>
-            Crucifix narwhal street art asymmetrical, humblebrag tote bag pop-up
-            fixie raclette taxidermy craft beer. Brunch bitters synth, VHS
-            crucifix heirloom meggings bicycle rights.
+            JobQuest is a powerful job tracking app designed to assist job
+            seekers in their quest for employment. Our mission is simple: to
+            help you secure your dream job. Whether you’re actively searching or
+            passively exploring opportunities, JobQuest provides a seamless
+            experience.
           </p>
           <Link to="/register" className="btn btn-hero">
             Login/Register

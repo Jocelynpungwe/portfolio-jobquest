@@ -41,7 +41,7 @@ const updateJob = async (req, res) => {
 }
 
 const getAllJobs = async (req, res) => {
-  const { search, status, jobType, sort } = req.query
+  const { search, status, jobType, sort, page: pageNo } = req.query
   const queryObject = { createdBy: req.user.userId }
 
   if (search) {
@@ -71,7 +71,7 @@ const getAllJobs = async (req, res) => {
     result = result.sort('-position')
   }
 
-  const page = Number(req.params.page) || 1
+  const page = Number(pageNo) || 1
   const limit = Number(req.params.limit) || 10
   const skip = (page - 1) * limit
 
