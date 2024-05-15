@@ -33,8 +33,6 @@ export const getAllJobs = createAsyncThunk(
       url = url + `&search=${search}`
     }
 
-  
-
     try {
       const { data } = await customeFetch.get(url, authHeader(thunkAPI))
       return data
@@ -73,8 +71,6 @@ const allJobsSlice = createSlice({
       const { name, value } = payload
       state.page = 1
       state[name] = value
-      console.log(name)
-      console.log(value)
     },
     clearFilter: (state) => {
       return { ...state, ...initialFiltersState }

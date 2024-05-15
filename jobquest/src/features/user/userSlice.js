@@ -7,9 +7,11 @@ import {
   getUserFromLocalStorage,
   removeUserFromLocalStorage,
 } from '../../utils/localStorage'
+
 import { clearValues } from '../job/jobSlice'
 import { clearAllJobsState } from '../allJobs/allJobsSlice'
 import authHeader from '../../utils/authHeader'
+
 const initialState = {
   isLoading: false,
   isSideBarOpen: false,
@@ -81,6 +83,22 @@ export const uploadUserProfile = createAsyncThunk(
 
         return thunkAPI.rejectWithValue('Unauthorized! Logging Out...')
       }
+      return thunkAPI.rejectWithValue(error.response.data.msg)
+    }
+  }
+)
+
+export const resetUserPassword = createAsyncThunk(
+  'user/password',
+  async (password, thunkAPI) => {
+    try {
+      const { data } = await customeFetch.patch(
+        '/auth/password',
+        password,
+        authHeader(thunkAPI)
+      )
+      return data
+    } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg)
     }
   }
@@ -172,6 +190,18 @@ const userSlice = createSlice({
         toast.success(`Profile Picture Updated`)
       })
       .addCase(uploadUserProfile.rejected, (state, { payload }) => {
+        state.isLoading = false
+        toast.error(payload)
+      })
+      .addCase(resetUserPassword.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(resetUserPassword.fulfilled, (state, { payload }) => {
+        const { msg } = payload
+        state.isLoading = false
+        toast.success(msg)
+      })
+      .addCase(resetUserPassword.rejected, (state, { payload }) => {
         state.isLoading = false
         toast.error(payload)
       })

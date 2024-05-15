@@ -11,7 +11,7 @@ const {
 } = require('../controllers/jobs')
 const testUserMiddleware = require('../middleware/testUser')
 
-router.route('/').post(createJob).get(getAllJobs)
+router.route('/').post(testUserMiddleware, createJob).get(getAllJobs)
 router.route('/stats').get(showStats)
 
 router

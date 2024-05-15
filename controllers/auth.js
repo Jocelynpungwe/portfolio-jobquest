@@ -117,7 +117,7 @@ const changePassword = async (req, res) => {
   }
 
   if (newPassword !== confirmNewPassword) {
-    throw new BadRequestError('Conform Password must match New Password ')
+    throw new BadRequestError('Confirm Password must match New Password ')
   }
 
   user.password = newPassword

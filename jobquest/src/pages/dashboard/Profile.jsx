@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { FormRow } from '../../components'
 import Wrapper from '../../assets/wrapper/DashboardFormPage'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { updateUser, uploadUserProfile } from '../../features/user/userSlice'
+import { Link } from 'react-router-dom'
 
 const Profile = () => {
   const { isLoading, user } = useSelector((store) => store.user)
@@ -86,6 +87,7 @@ const Profile = () => {
             value={userData.location}
             handleChange={handleChange}
           />
+
           <button className="btn btn-block" type="submit" disabled={isLoading}>
             {isLoading ? 'Please Wait...' : 'save changes'}
           </button>

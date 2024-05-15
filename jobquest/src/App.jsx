@@ -14,6 +14,7 @@ import {
   Profile,
   SharedLayout,
   Stats,
+  ResetPassword,
 } from './pages/dashboard'
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
             <Route path="all-jobs" element={<AllJobs />} />
             <Route path="add-job" element={<AddJobs />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="reset-password" element={<ResetPassword />} />
           </Route>
           <Route path="landing" element={<LandingPage />} />
           <Route path="register" element={<RegistrationPage />} />

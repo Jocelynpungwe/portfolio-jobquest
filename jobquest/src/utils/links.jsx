@@ -2,6 +2,7 @@ import { IoBarChartSharp } from 'react-icons/io5'
 import { MdQueryStats } from 'react-icons/md'
 import { FaWpforms } from 'react-icons/fa'
 import { ImProfile } from 'react-icons/im'
+import { FaRegRectangleList } from 'react-icons/fa6'
 
 const links = [
   {
@@ -27,6 +28,12 @@ const links = [
     text: 'profile',
     path: 'profile',
     icon: <ImProfile />,
+  },
+  {
+    id: 4,
+    text: 'reset password',
+    path: 'reset-password',
+    icon: <FaRegRectangleList />,
   },
 ]
 

@@ -67,7 +67,7 @@ export const editJob = createAsyncThunk(
         authHeader(thunkAPI)
       )
       thunkAPI.dispatch(clearValues())
-      console.log(data)
+
       return data
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg)
