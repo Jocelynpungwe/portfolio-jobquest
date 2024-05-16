@@ -9,10 +9,19 @@ const {
 } = require('../controllers/auth')
 const authenticationMiddleware = require('../middleware/authentication')
 const testUserMiddleware = require('../middleware/testUser')
+const rateLimiter = require('express-rate-limit')
 
-router.post('/register', registerUser)
+const apiLimiter = rateLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: {
+    msg: 'Too many requests from this IP, please try again after 15 minutes',
+  },
+})
 
-router.post('/login', loginUser)
+router.post('/register', apiLimiter, registerUser)
+
+router.post('/login', apiLimiter, loginUser)
 
 router.patch(
   '/upload',
