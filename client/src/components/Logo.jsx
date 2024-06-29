@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const Logo = () => {
+const Logo = ({ page }) => {
   return (
     <Wrapper>
-      <div>
+      <div className={page !== 'navbar' ? '' : 'div-logo'}>
         <h1>J</h1>
       </div>
-      <h3>JobQuest</h3>
+      <h3 className={page !== 'navbar' ? '' : 'h3-logo'}>JobQuest</h3>
     </Wrapper>
   )
 }
@@ -35,6 +35,21 @@ const Wrapper = styled.div`
     font-weight: 900;
     margin-top: 5px;
     margin-left: 8px;
+  }
+
+  .h3-logo {
+    display: none;
+  }
+
+  @media (min-width: 450px) {
+    .div-logo {
+      display: none;
+    }
+
+    .h3-logo {
+      display: block;
+      margin-top: 1rem;
+    }
   }
 `
 
